@@ -1,4 +1,4 @@
-from datetime import datetime
+
 import streamlit as st
 from PIL import Image
 import pandas as pd
@@ -17,26 +17,20 @@ st.set_page_config(page_title="Mi Portafolio Personal",
 
 st.markdown("""
 <style>
-    .main-header {
-        font-size: 3rem;
+    .main-title {
+        font-size: 2.5rem;
         color: #1f77b4;
         text-align: center;
-        margin-bottom: 2rem;
+        margin-bottom: 1rem;
     }
-    .section-header {
-        font-size: 2rem;
+    .section-title {
+        font-size: 1.8rem;
         color: #ff6b6b;
         border-bottom: 2px solid #ff6b6b;
         padding-bottom: 0.5rem;
-        margin-top: 2rem;
+        
     }
-    .card {
-        background-color: #f0f2f6;
-        padding: 1.5rem;
-        border-radius: 10px;
-        margin: 1rem 0;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
+
 </style>
 """, unsafe_allow_html=True)
 
@@ -84,7 +78,7 @@ def mostrar_inicio():
             st.metric("Clientes Satisfechos", "100+")
 
 def mostrar_sobre_mi():
-    st.markdown('<div class="section-header">👨‍🎓 Sobre Mí</div>', unsafe_allow_html=True)
+    st.markdown('<div class="section-title">👨‍🎓 Sobre Mí</div>', unsafe_allow_html=True)
     
     # Columnas para foto y texto
     col_foto, col_texto = st.columns([1, 2])
@@ -94,9 +88,17 @@ def mostrar_sobre_mi():
 
     with col_texto:
         st.markdown("""
-        <div class="card">
+        <div style='
+        background-color: #f0f8ff; 
+            padding: 1.5rem; 
+            border-radius: 10px; 
+            border-left: 4px solid #1f77b4;
+            margin: 1rem 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        '>
         ### Mi Historia
         
+        <h3 style='color: #1f77b4; margin-top: 0;'> Mi Historia</h3>
         Soy un profesional dedicado y curioso, siempre en busca de nuevos desafíos 
         y oportunidades para aprender y crecer. Mi pasión por la programación comenzó 
         cuando descubrí el poder de Python para resolver problemas complejos. Ahora estoy cumpliendo 
@@ -107,6 +109,7 @@ def mostrar_sobre_mi():
         Me encanta compartir conocimiento y colaborar en proyectos que tengan 
         un impacto positivo en la sociedad.
         </div>
+       
         """, unsafe_allow_html=True)
         
         # Redes sociales
@@ -128,7 +131,7 @@ def mostrar_sobre_mi():
     # Galería de fotos
     with st.expander("📸 **Ver mi galería de fotos**", expanded=False):
         st.markdown("### Mis Momentos")
-        col1, col2, col3, col4, col5 = st.columns(5)
+        col1, col2, col3, col4  = st.columns(4)
         
         with col1:
             st.image("sets/osiris1.jpg", width=180, caption="Personal")
@@ -140,9 +143,8 @@ def mostrar_sobre_mi():
                 st.image("sets/girl.jpg", width=180, caption="Novia")
 
         with col4:
-            st.image("sets/estadio.jpg", width=180, caption="Estadio")
-        with col5:
             st.image("sets/Bachiller.jpg", width=180, caption="Bachiller")
+
             
 def mostrar_habilidades():
     st.markdown('<div class="section-header"> Habilidades Técnicas</div>', unsafe_allow_html=True)
