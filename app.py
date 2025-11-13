@@ -2,11 +2,10 @@ import streamlit as st
 from PIL import Image
 import pandas as pd
 import numpy as np
-import smtplib 
-from email.mime.text import MIMEText    
-from email.mime.multipart import MIMEMultipart
-import os
+import requests  # ✅ CAMBIADO: Agregar requests
 import datetime
+# ❌ ELIMINADO: smtplib y email
+import os
 
 st.set_page_config(
     page_title="Mi Portafolio Personal",
@@ -236,7 +235,7 @@ def mostrar_contacto():
     st.markdown("---")
     st.subheader("💬 Envíame un Mensaje Directo")
     
-    # Formulario MEJORADO visualmente CON EL ENVÍO DE EMAIL
+    # Formulario MEJORADO visualmente CON FORMSPREE
     with st.form(key='contact_form'):
         col_nombre, col_email = st.columns(2)
         
@@ -256,50 +255,41 @@ def mostrar_contacto():
                 st.error("❌ Por favor, completa todos los campos.")
             else:
                 try:
-                    # ✅ CÓDIGO DE ENVÍO DE EMAIL COMPLETO
-                    Tu_correo = "flbecerrah@alumno.unsm.edu.pe"
-                    password = "wymj wvka hcen rlbw"
+                    # ✅ FORMSPREE - CON TU URL
+                    FORMSPREE_URL = "https://formspree.io/f/xkgkgaqa"  # ← TU URL DE FORMSPREE
                     
-                    email_body = f"""
-                    **NUEVO MENSAJE DESDE TU PORTFOLIO STREAMLIT**
+                    # Datos para enviar a Formspree
+                    data = {
+                        "name": nombre,
+                        "email": email,
+                        "message": mensaje,
+                        "_subject": f"📧 Nuevo mensaje de {nombre} - Portafolio",
+                        "_replyto": email
+                    }
                     
-                    **Nombre:** {nombre}
-                    **Email:** {email}
-                    **Fecha:** {datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")}
-                    
-                    **Mensaje:**
-                    {mensaje}
-                    
-                    ---
-                    Este mensaje fue enviado automáticamente desde tu aplicación Streamlit.
-                    Responde a: {email}
-                    """
-                    
-                    msg = MIMEText(email_body)
-                    msg["Subject"] = f"📧 Nuevo mensaje de {nombre} - Portafolio"
-                    msg["From"] = Tu_correo
-                    msg["To"] = Tu_correo
-                    
-                    # Enviar el correo
+                    # Enviar el formulario
                     with st.spinner("📤 Enviando mensaje..."):
-                        server = smtplib.SMTP("smtp.gmail.com", 587)
-                        server.starttls()
-                        server.login(Tu_correo, password)
-                        server.sendmail(Tu_correo, Tu_correo, msg.as_string())
-                        server.quit()
-                        
-                    st.success("✅ ¡Mensaje enviado con éxito! Te contactaré pronto.")
-                    st.balloons()
+                        response = requests.post(
+                            FORMSPREE_URL,
+                            data=data,
+                            headers={
+                                "Accept": "application/json"
+                            }
+                        )
                     
-                    # Mostrar resumen
-                    with st.expander("📋 Ver resumen del mensaje enviado"):
-                        st.write(f"**👤 Nombre:** {nombre}")
-                        st.write(f"**📧 Email:** {email}")
-                        st.write(f"**💭 Mensaje:** {mensaje}")
-                        st.write(f"**📅 Fecha:** {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+                    if response.status_code == 200:
+                        st.success("✅ ¡Mensaje enviado con éxito! Te contactaré pronto.")
+                        st.balloons()
                         
-                except smtplib.SMTPAuthenticationError:
-                    st.error("❌ Error de autenticación. Verifica tu correo y contraseña.")
+                        # Mostrar resumen
+                        with st.expander("📋 Ver resumen del mensaje enviado"):
+                            st.write(f"**👤 Nombre:** {nombre}")
+                            st.write(f"**📧 Email:** {email}")
+                            st.write(f"**💭 Mensaje:** {mensaje}")
+                            st.write(f"**📅 Fecha:** {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+                    else:
+                        st.error("❌ Error al enviar el mensaje. Por favor, intenta nuevamente.")
+                        
                 except Exception as e:
                     st.error(f"❌ Ha ocurrido un error al enviar el mensaje: {e}")
                     st.info("🔍 Asegúrate de que tu conexión a Internet esté activa y vuelve a intentarlo.")
@@ -320,7 +310,7 @@ elif seccion == "📞 Contacto":
 st.markdown("---")
 st.markdown(
     "<div style='text-align: center; color: #666;'>"
-    "Hecho con ❤️ usando Streamlit | © 2024 Flavio Osiris Becerra Hernández"
+    "Hecho con ❤️ usando Streamlit y Python | © 2024 Flavio Osiris Becerra Hernández"
     "</div>",
     unsafe_allow_html=True
 )
