@@ -7,6 +7,7 @@ import smtplib
 from email.mime.text import MIMEText    
 from email.mime.multipart import MIMEMultipart
 import os
+import datetime
 
 
 st.set_page_config(page_title="Mi Portafolio Personal",
@@ -251,7 +252,7 @@ def mostrar_contacto():
                     **NUEVO MENSAJE DESDE TU PORTFOLIO STREAMLIT**
                     **Nombre:** {nombre}
                     **Email:** {email}
-                    **fecha:** {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}
+                    **fecha:** {datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")}
                     
                     **Mensaje:**
                     {mensaje}
@@ -283,7 +284,7 @@ def mostrar_contacto():
                         st.write(f"**Nombre:** {nombre}")
                         st.write(f"**Email:** {email}")
                         st.write(f"**Mensaje:** {mensaje}")
-                        st.write(f"**Fecha:** {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+                        st.write(f"**Fecha:** {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
                         
                 except smtplib.SMTPAuthenticationError:
                     st.error("Error de autenticación. Verifica tu correo y contraseña.")
